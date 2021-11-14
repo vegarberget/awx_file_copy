@@ -1,0 +1,4 @@
+- name: Copy a single file
+  ansible.windows.win_copy:
+    src: /test.ps1
+    dest: C:\Temp\test.ps1

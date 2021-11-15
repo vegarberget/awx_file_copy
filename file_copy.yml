@@ -20,7 +20,7 @@
   gather_facts: False
   
   vars:
-    source: '/test.ps1'
+    source: './test.ps1'
     target: 'C:\Temp\test.ps1'
 
   tasks:

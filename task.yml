@@ -1,0 +1,77 @@
+---
+# ## ---------------------------------- ##
+- name: GET SURVEY PROVIDED TARGETS
+  hosts: localhost
+  gather_facts: False
+  tasks:
+  # Add locally provided hosts to a group
+    - name: Adding list of hosts to group
+      add_host:
+        name: "{{ item }}"
+        group: survey_hosts
+      loop: "{{ run_hosts.split('\n') }}"
+      # Running this on the Ansible contoller only:
+      delegate_to: localhost
+      run_once: True
+
+# ## ---------------------------------- ##
+- name: REMOVE IE AND INSTALL EDGE
+  hosts: survey_hosts
+  gather_facts: False
+  
+  vars:
+    source: '\\sikt.sykehuspartner.no\data\Softlib\Microsoft\Microsoft Edge for business\95.0.1020.44\MicrosoftEdgeEnterpriseX64.msi'
+    target: 'C:\temp'
+
+  tasks:
+    - name: Remove Internet Explorer
+      win_optional_feature: 
+        name: Internet-Explorer-Optional-amd64
+        state: "{{ IE_State }}"
+      register: ie_status
+
+    - name: Copy Installer trough task scheduler
+      win_scheduled_task:
+        name: Copy_Installer
+        username: "{{ ansible_user }}"
+        password: "{{ ansible_password }}"
+        logon_type: password
+        actions:
+          - path: powershell.exe
+            arguments: -command "Copy-Item -Path '{{ source }}' -Destination '{{ target }}' -Recurse"
+          - path: cmd.exe
+            arguments: /c schtasks.exe /Delete /TN "Copy_Installer" /F
+        triggers:
+          - type: registration
+
+    - name: Wait for the scheduled task to complete
+      win_scheduled_task_stat:
+        name: Copy_Installer
+        register: task_stat
+        until: (task_stat.state is defined and task_stat.state.status != "TASK_STATE_RUNNING") or (task_stat.task_exists == False)
+        retries: 7
+        delay: 5
+
+
+    - name: install Edge
+      win_package:
+        # product_id: '{A60CB696-0486-49EC-988E-B460B3B15EB3}'
+        path: "{{ target }}\\MicrosoftEdgeEnterpriseX64.msi"
+        state: "{{ Edge_State }}"
+        user_name: "{{ ansible_user }}"
+        user_password: "{{ ansible_password }}"
+        
+    # for å ta en liten pause så installeren rekker å bli ferdig.
+    - name: vent 60 sekunder
+      win_wait_for:
+        timeout: 60
+
+    # - name: DEBUG | Reboot if required
+      # debug:
+      #   var: ie_status.reboot_required
+      # when: ie_status.reboot_required
+
+    - name: Include tasks
+      include_tasks: "tasks/reboot.yml"
+      when: ie_status.reboot_required 
+

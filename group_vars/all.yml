@@ -1,0 +1,9 @@
+ansible_become_flags:
+  logon_flags: netcredentials_only
+  logon_type: new_credentials
+ansible_connection: winrm
+ansible_port: 5985
+ansible_winrm_scheme: http
+ansible_winrm_server_cert_validation: ignore
+ansible_winrm_transport: kerberos
+ansible_winrm_kerberos_delegation: true

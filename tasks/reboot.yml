@@ -1,0 +1,15 @@
+---
+## Reboot the target host
+  # Give info
+  - name: Rebooting info
+    debug:
+      msg: "{{ inventory_hostname_short }} is going down for reboot"
+  # Do the reboot
+  - name: Rebooting ...
+    win_reboot:
+      reboot_timeout: 3600  # seconds
+    register: reboot_result
+  # Give info on reboot time
+  - name: Reboot Time
+    debug:
+      msg: "The system rebooted in {{ reboot_result.elapsed }} seconds."

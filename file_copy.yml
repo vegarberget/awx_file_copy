@@ -20,8 +20,8 @@
   gather_facts: False
   
   vars:
-    source: './test.ps1'
-    target: 'C:\Temp\test.ps1'
+    source: 'temp/'
+    target: 'C:\Temp\'
 
   tasks:
     - name: Copy a single file

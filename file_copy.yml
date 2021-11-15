@@ -26,5 +26,5 @@
   tasks:
     - name: Copy a single file
       ansible.windows.win_copy:
-        src: {{ source }}
-        dest: {{ target }}
+        src: "{{ source }}"
+        dest: "{{ target }}"

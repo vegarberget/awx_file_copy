@@ -1,5 +1,30 @@
 ---
-- name: Copy a single file
-  ansible.windows.win_copy:
-    src: /test.ps1
-    dest: C:\Temp\test.ps1
+# ## ---------------------------------- ##
+- name: GET SURVEY PROVIDED TARGETS
+  hosts: localhost
+  gather_facts: False
+  tasks:
+  # Add locally provided hosts to a group
+    - name: Adding list of hosts to group
+      add_host:
+        name: "{{ item }}"
+        group: survey_hosts
+      loop: "{{ run_hosts.split('\n') }}"
+      # Running this on the Ansible contoller only:
+      delegate_to: localhost
+      run_once: True
+
+# ## ---------------------------------- ##
+- name: REMOVE IE AND INSTALL EDGE
+  hosts: survey_hosts
+  gather_facts: False
+  
+  vars:
+    source: '/test.ps1'
+    target: 'C:\Temp\test.ps1'
+
+  tasks:
+    - name: Copy a single file
+      ansible.windows.win_copy:
+        src: {{ source }}
+        dest: {{ target }}

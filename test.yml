@@ -18,6 +18,10 @@
 - name: Test
   hosts: survey_hosts
   gather_facts: True
+
+  vars:
+    target: 'C:\temp'
+    ansible_user: '{{ domain_user }}{{ admin_domain }}'
   
     - name: Example from an Ansible Playbook
       win_ping:

@@ -20,15 +20,16 @@
   gather_facts: False
   
   vars:
-    source: '\\sikt.sykehuspartner.no\data\Softlib\Microsoft\Microsoft Edge for business\95.0.1020.44\MicrosoftEdgeEnterpriseX64.msi'
+#    source: '\\sikt.sykehuspartner.no\data\Softlib\Microsoft\Microsoft Edge for business\95.0.1020.44\MicrosoftEdgeEnterpriseX64.msi'
     target: 'C:\temp'
+    ansible_user: '{{ domain_user }}{{ admin_domain }}'
 
-  tasks:
-    - name: Remove Internet Explorer
-      win_optional_feature: 
-        name: Internet-Explorer-Optional-amd64
-        state: "{{ IE_State }}"
-      register: ie_status
+#  tasks:
+#    - name: Install application
+#      win_optional_feature: 
+#        name: Internet-Explorer-Optional-amd64
+#        state: "{{ IE_State }}"
+#      register: ie_status
 
     - name: Copy Installer trough task scheduler
       win_scheduled_task:
@@ -43,6 +44,7 @@
             arguments: /c schtasks.exe /Delete /TN "Copy_Installer" /F
         triggers:
           - type: registration
+      When: install_status|present
 
     - name: Wait for the scheduled task to complete
       win_scheduled_task_stat:
@@ -51,13 +53,13 @@
         until: (task_stat.state is defined and task_stat.state.status != "TASK_STATE_RUNNING") or (task_stat.task_exists == False)
         retries: 7
         delay: 5
+      When: install_status|present
 
-
-    - name: install Edge
+    - name: install Application
       win_package:
         # product_id: '{A60CB696-0486-49EC-988E-B460B3B15EB3}'
-        path: "{{ target }}\\MicrosoftEdgeEnterpriseX64.msi"
-        state: "{{ Edge_State }}"
+        path: "{{ target }}{{ filnavn }}"
+        state: "{{ install_status }}"
         user_name: "{{ ansible_user }}"
         user_password: "{{ ansible_password }}"
         
@@ -65,6 +67,7 @@
     - name: vent 60 sekunder
       win_wait_for:
         timeout: 60
+      When: install_status|present
 
     # - name: DEBUG | Reboot if required
       # debug:
@@ -73,5 +76,5 @@
 
     - name: Include tasks
       include_tasks: "tasks/reboot.yml"
-      when: ie_status.reboot_required 
+      when: install_status.reboot_required 
 

@@ -1,0 +1,7 @@
+---
+- name: Test
+  hosts: survey_hosts
+  gather_facts: True
+  
+    - name: Example from an Ansible Playbook
+      win_ping:

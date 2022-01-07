@@ -21,7 +21,7 @@
 
   vars:
     target: 'C:\temp'
-    ansible_user: '{{ domain_user }}{{ admin_domain }}'
+    ansible_user: '{{ domain_user }}@{{ admin_domain }}'
   tasks:  
     - name: Example from an Ansible Playbook
       win_ping:

@@ -2,4 +2,4 @@
 - src: https://github.com/vegarberget/GET-SURVEY-PROVIDED-TARGETS.git
   scm: git
   version: master
-  name: GET SURVEY PROVIDED TARGETS
+  name: GET-SURVEY-PROVIDED-TARGETS

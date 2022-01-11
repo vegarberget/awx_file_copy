@@ -15,7 +15,7 @@
       run_once: True
 
 # ## ---------------------------------- ##
-- name: REMOVE IE AND INSTALL EDGE
+- name: Copy FIle
   hosts: survey_hosts
   gather_facts: False
   

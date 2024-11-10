@@ -3,3 +3,4 @@
       ansible.builtin.yum:
         name: '*'
         state: latest
+      become: true

@@ -1,0 +1,30 @@
+---
+# ## ---------------------------------- ##
+- name: GET SURVEY PROVIDED TARGETS
+  hosts: localhost
+  gather_facts: False
+  tasks:
+  # Add locally provided hosts to a group
+    - name: Adding list of hosts to group
+      add_host:
+        name: "{{ item }}"
+        group: survey_hosts
+      loop: "{{ run_hosts.split('\n') }}"
+      # Running this on the Ansible contoller only:
+      delegate_to: localhost
+      run_once: True
+
+# ## ---------------------------------- ##
+- name: Copy FIle
+  hosts: survey_hosts
+  gather_facts: False
+  
+  vars:
+    #source: 'temp/'
+    #target: 'C:\Temp\'
+    #ansible_user: '{{ domain_user }}@{{ admin_domain }}'
+
+  tasks:
+    - name: Upgrade all packages
+      ansible.builtin.import_tasks:
+        file: tasks/update_rocky.yaml

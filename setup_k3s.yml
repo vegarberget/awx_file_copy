@@ -27,4 +27,4 @@
   tasks:
     - name: Upgrade all packages
       ansible.builtin.import_tasks:
-        file: tasks/update_rocky.yaml
+        file: update_rocky.yaml

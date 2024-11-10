@@ -20,9 +20,9 @@
   gather_facts: False
   
   vars:
-    source: 'temp/'
-    target: 'C:\Temp\'
-    ansible_user: '{{ domain_user }}@{{ admin_domain }}'
+    #source: 'temp/'
+    #target: 'C:\Temp\'
+    #ansible_user: '{{ domain_user }}@{{ admin_domain }}'
 
   tasks:
     - name: Copy a single file

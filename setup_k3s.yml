@@ -23,6 +23,7 @@
     #source: 'temp/'
     #target: 'C:\Temp\'
     #ansible_user: '{{ domain_user }}@{{ admin_domain }}'
+    
 
   tasks:
     - name: Upgrade all packages
@@ -66,3 +67,5 @@
         path: .kube/config
         owner: rocky
         group: rocky
+      become: true
+      become_user: rocky

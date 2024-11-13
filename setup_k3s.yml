@@ -28,6 +28,11 @@
     - name: Upgrade all packages
       ansible.builtin.import_tasks:
         file: tasks/update_rocky.yml
+
+    - name: Copy install script
+        ansible.builtin.copy:
+          src: install_k3s.sh
+          dest: install_k3s.sh
     
     - name: install k3s
       ansible.builtin.command: ./install_k3s.sh

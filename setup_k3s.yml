@@ -62,10 +62,8 @@
       become_user: rocky
       when: k3s_exist.stat.exists
     
-    - name: Give insecure permissions to an existing file
-      ansible.builtin.file:
-        path: .kube/config
-        owner: rocky
-        group: rocky
+    - name: Copy kubeconfig
+      ansible.builtin.command: sudo chown rocky:rocky .kube/config
       become: true
       become_user: rocky
+      when: k3s_exist.stat.exists

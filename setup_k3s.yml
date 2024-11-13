@@ -100,5 +100,5 @@
       when: k3s_exist.stat.exists
 
     - name: awx
-    ansible.builtin.command: kubectl apply -k .
-    when: k3s_exist.stat.exists
+      ansible.builtin.command: kubectl apply -k .
+      when: k3s_exist.stat.exists

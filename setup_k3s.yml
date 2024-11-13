@@ -36,5 +36,5 @@
     
     - name: install k3s
       ansible.builtin.command: ./install_k3s.sh
-      become: yes
+      become: true
       become_user: rocky

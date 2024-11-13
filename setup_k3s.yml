@@ -71,5 +71,5 @@
     - name: populate .bashrc
       lineinfile:
         dest: ".bashrc"
-        line: "KUBECONFIG=~/.kube/config"
+        line: "export KUBECONFIG=~/.kube/config"
 

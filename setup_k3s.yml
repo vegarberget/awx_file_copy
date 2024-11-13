@@ -62,8 +62,14 @@
       become_user: rocky
       when: k3s_exist.stat.exists
     
-    - name: Copy kubeconfig
+    - name: Chown config
       ansible.builtin.command: sudo chown rocky:rocky .kube/config
       become: true
       become_user: rocky
       when: k3s_exist.stat.exists
+
+    - name: populate .bashrc
+      lineinfile:
+        dest: ".bashrc"
+        line: "KUBECONFIG=~/.kube/config"
+

@@ -34,6 +34,9 @@
         src: install_k3s.sh
         dest: install_k3s.sh
     
+    - name: Changing perm of "install_k3s.sh", adding "+x"
+      file: dest=install_k3s.sh mode=a+x
+    
     - name: install k3s
       ansible.builtin.command: ./install_k3s.sh
       become: true

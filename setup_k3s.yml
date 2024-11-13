@@ -60,5 +60,5 @@
         src: /etc/rancher/k3s/k3s.yaml
         dest: .kube/config
         remote_src: true
-      become: true
-      become_user: rocky
+        become: true
+        become_user: rocky

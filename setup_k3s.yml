@@ -96,8 +96,8 @@
 
     - name: Copy install script
       ansible.builtin.copy:
-        src: kuztomization.yaml
-        dest: kuztomization.yaml
+        src: kustomization.yaml
+        dest: kustomization.yaml
       when: k3s_exist.stat.exists
 
     - name: awx

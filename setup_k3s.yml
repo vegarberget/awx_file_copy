@@ -41,3 +41,11 @@
       ansible.builtin.command: ./install_k3s.sh
       become: true
       become_user: rocky
+    
+      - name: Copy kubeconfig
+        ansible.builtin.copy:
+          src: /etc/rancher/k3s/k3s.yaml
+          dest: .kube/config
+          remote_src: yes
+        become: true
+        become_user: rocky

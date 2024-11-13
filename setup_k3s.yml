@@ -28,24 +28,32 @@
     - name: Upgrade all packages
       ansible.builtin.import_tasks:
         file: tasks/update_rocky.yml
+    
+    - name: Task name
+      stat:
+        path: /etc/rancher/k3s/k3s.yaml
+      register: k3s_exist
 
     - name: Copy install script
       ansible.builtin.copy:
         src: install_k3s.sh
         dest: install_k3s.sh
+      when: not k3s_exist.stat.exists
     
     - name: Changing perm of "install_k3s.sh", adding "+x"
       file: dest=install_k3s.sh mode=a+x
-    
+      when: not k3s_exist.stat.exists
+
     - name: install k3s
       ansible.builtin.command: ./install_k3s.sh
       become: true
       become_user: rocky
-    
-      - name: Copy kubeconfig
-        ansible.builtin.copy:
-          src: /etc/rancher/k3s/k3s.yaml
-          dest: .kube/config
-          remote_src: yes
-        become: true
-        become_user: rocky
+      when: not k3s_exist.stat.exists
+
+    - name: Copy kubeconfig
+      ansible.builtin.copy:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: .kube/config
+        remote_src: yes
+      become: true
+      become_user: rocky

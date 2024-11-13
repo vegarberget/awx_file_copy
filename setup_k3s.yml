@@ -29,6 +29,12 @@
     - name: Upgrade all packages
       ansible.builtin.import_tasks:
         file: tasks/update_rocky.yml
+
+    - name: Install the latest version of git
+      ansible.builtin.yum:
+        name: 
+          - git
+        state: latest
     
     - name: Task name
       stat:
@@ -72,4 +78,27 @@
       lineinfile:
         dest: ".bashrc"
         line: "export KUBECONFIG=~/.kube/config"
+    
+    - name: nginx
+      ansible.builtin.command: kubectl create deployment nginx --image=nginx --port=80
+      when: k3s_exist.stat.exists
+ 
+    - name: nginx
+      ansible.builtin.command: kubectl create service clusterip nginx --tcp=80:80
+      when: k3s_exist.stat.exists
+  
+    - name: Copy install script
+      ansible.builtin.copy:
+        src: awx-manifest.yaml
+        dest: awx-manifest.yaml
+      when: k3s_exist.stat.exists
 
+    - name: Copy install script
+      ansible.builtin.copy:
+        src: kuztomization.yaml
+        dest: kuztomization.yaml
+      when: k3s_exist.stat.exists
+
+    - name: awx
+    ansible.builtin.command: kubectl apply -k .
+    when: k3s_exist.stat.exists

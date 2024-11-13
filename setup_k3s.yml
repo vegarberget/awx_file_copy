@@ -54,6 +54,6 @@
       ansible.builtin.copy:
         src: /etc/rancher/k3s/k3s.yaml
         dest: .kube/config
-        remote_src: yes
+        remote_src: true
       become: true
       become_user: rocky

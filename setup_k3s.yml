@@ -56,7 +56,7 @@
         state: directory
 
     - name: Copy kubeconfig
-      ansible.builtin.copy:ansible.builtin.command: cp /etc/rancher/k3s/k3s.yaml .kube/config
+      ansible.builtin.command: cp /etc/rancher/k3s/k3s.yaml .kube/config
       become: true
       become_user: rocky
       when: k3s_exist.stat.exists

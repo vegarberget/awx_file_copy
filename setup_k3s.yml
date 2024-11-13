@@ -35,6 +35,8 @@
         name: 
           - git
         state: latest
+      become: true
+      become_user: rocky
     
     - name: Task name
       stat:

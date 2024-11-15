@@ -87,19 +87,3 @@
     - name: nginx
       ansible.builtin.command: kubectl create service clusterip nginx --tcp=80:80
       when: k3s_exist.stat.exists
-  
-    - name: Copy install script
-      ansible.builtin.copy:
-        src: awx-manifest.yaml
-        dest: awx-manifest.yaml
-      when: k3s_exist.stat.exists
-
-    - name: Copy install script
-      ansible.builtin.copy:
-        src: kustomization.yaml
-        dest: kustomization.yaml
-      when: k3s_exist.stat.exists
-
-    - name: awx
-      ansible.builtin.command: kubectl apply -k .
-      when: k3s_exist.stat.exists

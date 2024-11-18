@@ -62,6 +62,11 @@
       ansible.builtin.file:
         path: .kube
         state: directory
+        
+    - name: Task name
+      stat:
+        path: /etc/rancher/k3s/k3s.yaml
+      register: k3s_exist
 
     - name: Copy kubeconfig
       ansible.builtin.command: sudo cp /etc/rancher/k3s/k3s.yaml .kube/config
@@ -79,6 +84,7 @@
       lineinfile:
         dest: ".bashrc"
         line: "export KUBECONFIG=~/.kube/config"
+      when: k3s_exist.stat.exists
     
     - name: nginx
       ansible.builtin.command: kubectl create deployment nginx --image=nginx --port=80

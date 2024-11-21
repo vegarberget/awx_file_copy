@@ -47,11 +47,13 @@
         path: /etc/rancher/k3s/
         state: directory
         mode: '0755'
+      become: true
         
     - name: Copy a registries.yaml
       ansible.builtin.copy:
         src: etc/rancher/k3s/registries.yaml
         dest: /etc/rancher/k3s/registries.yaml
+      become: true
     
     - name: Copy install script
       ansible.builtin.copy:

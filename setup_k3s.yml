@@ -50,7 +50,7 @@
         
     - name: Copy a registries.yaml
       ansible.builtin.copy:
-        src: k3s/etc/rancher/k3s/registries.yaml
+        src: etc/rancher/k3s/registries.yaml
         dest: /etc/rancher/k3s/registries.yaml
     
     - name: Copy install script

@@ -51,7 +51,7 @@
         
     - name: Copy a registries.yaml
       ansible.builtin.copy:
-        src: etc/rancher/k3s/registries.yaml
+        src: etc/k3s/registries.yaml
         dest: /etc/rancher/k3s/registries.yaml
       become: true
     
@@ -67,9 +67,15 @@
 
     - name: install k3s
       ansible.builtin.command: ./install_k3s.sh
-      become: true
       become_user: rocky
+      become: true
       when: not k3s_exist.stat.exists
+
+    - name: Start service httpd, if not started
+      ansible.builtin.service:
+        name: k3s
+        state: started
+      become: true
     
     - name: Create a directory if it does not exist
       ansible.builtin.file:
@@ -85,24 +91,24 @@
       ansible.builtin.command: sudo cp /etc/rancher/k3s/k3s.yaml .kube/config
       become: true
       become_user: rocky
-      when: k3s_config_exist.stat.exists
+      when: not k3s_config_exist.stat.exists
     
     - name: Chown config
       ansible.builtin.command: sudo chown {{ ansible_user }}:{{ ansible_user }} .kube/config
       become: true
       become_user: rocky
-      when: k3s_config_exist.stat.exists
+      when: not k3s_config_exist.stat.exists
 
     - name: populate .bashrc
       lineinfile:
         dest: ".bashrc"
         line: "export KUBECONFIG=~/.kube/config"
-      when: k3s_config_exist.stat.exists
+      when: not k3s_config_exist.stat.exists
     
     - name: nginx
       ansible.builtin.command: kubectl create deployment nginx --image=nginx --port=80
-      when: k3s_config_exist.stat.exists
+      when: not k3s_config_exist.stat.exists
  
     - name: nginx
       ansible.builtin.command: kubectl create service clusterip nginx --tcp=80:80
-      when: k3s_config_exist.stat.exists
+      when: not k3s_config_exist.stat.exists

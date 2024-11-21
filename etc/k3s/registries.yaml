@@ -1,0 +1,9 @@
+mirrors:
+  "*":
+    endpoint:
+      - "https://harbor.dmz.iotlab.no"
+configs:
+  "docker.io":
+  "*":
+    tls:
+      insecure_skip_verify: true
